@@ -7,12 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnyaStore.Services.CouponAPI.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
-        {
-            
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Coupon> Coupons { get; set; }
 
         // create a seed method to add data to the database
