@@ -1,4 +1,5 @@
 using AnyaStore.Services.CouponAPI.Data;
+using AnyaStore.Services.CouponAPI.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,5 +30,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// create a custom service extension to upadate the db if migrations is exsiting
+app.DBMigration();
 
 app.Run();

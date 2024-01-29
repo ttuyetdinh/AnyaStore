@@ -4,6 +4,7 @@ using AnyaStore.Services.CouponAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnyaStore.Services.CouponAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240129075249_Coupon_seed_data")]
+    partial class Coupon_seed_data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,27 +57,21 @@ namespace AnyaStore.Services.CouponAPI.Migrations
                         {
                             CouponId = 1,
                             CouponCode = "10OFF",
-                            CreatedOn = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7392),
                             DiscountAmount = 10.0,
-                            LastUpdated = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7377),
                             MinAmount = 100
                         },
                         new
                         {
                             CouponId = 2,
                             CouponCode = "20OFF",
-                            CreatedOn = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7431),
                             DiscountAmount = 20.0,
-                            LastUpdated = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7430),
                             MinAmount = 200
                         },
                         new
                         {
                             CouponId = 3,
                             CouponCode = "30OFF",
-                            CreatedOn = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7443),
                             DiscountAmount = 30.0,
-                            LastUpdated = new DateTime(2024, 1, 29, 14, 56, 1, 91, DateTimeKind.Local).AddTicks(7442),
                             MinAmount = 300
                         });
                 });

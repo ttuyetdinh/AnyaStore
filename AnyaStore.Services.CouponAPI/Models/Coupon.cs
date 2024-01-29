@@ -15,9 +15,10 @@ namespace AnyaStore.Services.CouponAPI.Models
 
         public int? MinAmount { get; set; }
 
-        public DateTime? LastUpdated { get; set; }
+        public DateTime? LastUpdated { get; set; } = DateTime.Now;
 
-        public DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; } = DateTime.Now;
+
 
         
         
