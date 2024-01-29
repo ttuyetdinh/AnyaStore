@@ -1,5 +1,7 @@
 using AnyaStore.Services.CouponAPI.Data;
 using AnyaStore.Services.CouponAPI.Extensions;
+using AnyaStore.Services.CouponAPI.Repository;
+using AnyaStore.Services.CouponAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// add common repository DI
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 
 builder.Services.AddControllers();
