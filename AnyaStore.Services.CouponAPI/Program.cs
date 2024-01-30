@@ -1,7 +1,9 @@
+using AnyaStore.Services.CouponAPI;
 using AnyaStore.Services.CouponAPI.Data;
 using AnyaStore.Services.CouponAPI.Extensions;
 using AnyaStore.Services.CouponAPI.Repository;
 using AnyaStore.Services.CouponAPI.Repository.IRepository;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // add common repository DI
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+
+// explicit control over the creation and registration of the IMapper instance
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 builder.Services.AddControllers();
