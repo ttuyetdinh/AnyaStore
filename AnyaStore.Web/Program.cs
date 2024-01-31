@@ -1,7 +1,18 @@
+using AnyaStore.Web.Services;
+using AnyaStore.Web.Services.IServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// add DI
+builder.Services.AddScoped<IBaseService, BaseService>();
+
+builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
+
+builder.Services.AddTransient<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
 
 var app = builder.Build();
 
