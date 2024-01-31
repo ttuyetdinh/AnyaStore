@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnyaStore.Services.CouponAP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnyaStore.Web", "AnyaStore.Web\AnyaStore.Web.csproj", "{3A052D53-4BEC-4293-A55F-D0BD277FC704}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnyaStore.Services.AuthAPI", "AnyaStore.Services.AuthAPI\AnyaStore.Services.AuthAPI.csproj", "{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{3A052D53-4BEC-4293-A55F-D0BD277FC704}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A052D53-4BEC-4293-A55F-D0BD277FC704}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A052D53-4BEC-4293-A55F-D0BD277FC704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AC50B762-560A-496E-85CA-7EA586930AB6} = {D612992D-3359-4839-896C-27C0283AD293}
 		{3A052D53-4BEC-4293-A55F-D0BD277FC704} = {25E5E450-1E43-40B3-B268-24CB80575229}
+		{DEEF393B-2C2F-46DC-8D76-DC3A0D52EC15} = {D612992D-3359-4839-896C-27C0283AD293}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A88E1832-7040-4D86-B28D-115B28916352}

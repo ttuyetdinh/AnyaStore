@@ -1,0 +1,6 @@
+@AnyaStore.Services.AuthAPI_HostAddress = http://localhost:5008
+
+GET {{AnyaStore.Services.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
