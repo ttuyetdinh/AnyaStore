@@ -29,9 +29,12 @@ namespace AnyaStore.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 coupons = JsonConvert.DeserializeObject<List<CouponDTO>>(Convert.ToString(response.Result));
+                return View(coupons);
             }
 
-            return View(coupons);
+            TempData["error"] = response?.ErrorMessage;
+            return NotFound();
+
         }
 
         public async Task<IActionResult> CouponCreate()
@@ -48,12 +51,13 @@ namespace AnyaStore.Web.Controllers
                 var response = await _couponService.CreateAsync<ResponseDTO>(coupon);
 
                 if (response != null && response.IsSuccess)
-                {
+                {   
+                    TempData["success"] = "Coupon created successfully!";
                     return RedirectToAction(nameof(CouponIndex));
                 }
             }
 
-
+            TempData["error"] = "Coupon creation failed!";
             return View(coupon);
         }
 
@@ -64,11 +68,13 @@ namespace AnyaStore.Web.Controllers
             var response = await _couponService.DeleteAsync<ResponseDTO>(couponId);
 
             if (response != null && response.IsSuccess)
-            {
+            {   
+                TempData["success"] = "Coupon deleted successfully!";
                 return RedirectToAction(nameof(CouponIndex));
 
             }
-
+            
+            TempData["error"] = "Coupon deletion failed!";
             return RedirectToAction(nameof(CouponIndex));
         }
 

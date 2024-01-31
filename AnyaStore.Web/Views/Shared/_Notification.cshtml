@@ -1,0 +1,25 @@
+﻿@{
+    // have to load the jquery lib from here because the partial view is rendered before the bunches of script is loaded
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <style>
+        #toast-container .toast {
+            font-size: 20px;
+        }
+    </style>
+    if (TempData["success"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.success("@TempData["success"]");
+            });
+        </script>
+    };
+    if (TempData["error"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.error("@TempData["error"]");
+            });
+        </script>
+    };
+}
