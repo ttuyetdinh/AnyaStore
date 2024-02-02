@@ -1,5 +1,7 @@
 using AnyaStore.Services.AuthAPI.Data;
 using AnyaStore.Services.AuthAPI.Models;
+using AnyaStore.Services.AuthAPI.Services;
+using AnyaStore.Services.AuthAPI.Services.IServices;
 using AnyaStore.Services.CouponAPI.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // using the specified DbContext, and with the default token providers.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+// add config password for Identity User
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 1;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+});
+// binding the JWT settings from the application's configuration to the JwtOptions class. 
+// This allows the settings to be injected and used elsewhere in the application, such as in the code that generates or validates JWTs.
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("APISettings:JwtOptions"));
+
+// Add DI services
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
