@@ -14,7 +14,7 @@ namespace AnyaStore.Web.Services
     {
         public IHttpClientFactory _httpClientFactory { get; set; }
         public IApiMessageRequestBuilder _apiMessageRequestBuilder { get; set; }
-        public string BaseUrl { get; set; }
+        public string BaseUrl { get; private set; }
 
         public BaseService(IHttpClientFactory httpClientFactory, IApiMessageRequestBuilder apiMessageRequestBuilder, IConfiguration configuration)
         {
@@ -23,7 +23,7 @@ namespace AnyaStore.Web.Services
         }
         public void SetBaseUrl(string baseUrl)
         {
-            BaseUrl = baseUrl;
+            BaseUrl = baseUrl ?? "";
         }
         public async Task<T> SendAsync<T>(RequestDTO requestDTO)
         {

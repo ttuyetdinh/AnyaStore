@@ -7,8 +7,8 @@ using AnyaStore.Web.Models.DTO;
 namespace AnyaStore.Web.Services.IServices
 {
     public interface IBaseService
-    {   
-        string BaseUrl { get; set; }
+    {
+        string BaseUrl { get; }
         Task<T> SendAsync<T>(RequestDTO requestDTO);
         void SetBaseUrl(string baseUrl);
     }
