@@ -33,6 +33,7 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("APISett
 
 // Add DI services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -15,12 +15,32 @@ namespace AnyaStore.Services.AuthAPI.Services
         private readonly AppDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AuthService(AppDbContext appDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+
+        public AuthService(AppDbContext appDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
         {
             _db = appDbContext;
             _userManager = userManager;
             _roleManager = roleManager;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
+
+        public async Task<bool> AssignRole(string userName, string roleName)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName == userName);
+            if (user == null) return false;
+
+            // create role if not exist
+            if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            // assign role to user
+            await _userManager.AddToRoleAsync(user, roleName);
+            return true;
+        }
+
         public async Task<LoginResponseDTO> Login(LoginRequestDTO request)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName == request.UserName);
@@ -31,24 +51,24 @@ namespace AnyaStore.Services.AuthAPI.Services
             {
                 return new LoginResponseDTO
                 {
-                    Token = null,
-                    User = null
+                    User = null,
+                    Token = null
                 };
             }
 
             // if user valid, generate JWT token
-            var userDTO = new UserDTO
-            {
-                ID = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber
-            };
+            var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new LoginResponseDTO
             {
-                User = userDTO,
-                Token = ""
+                User = new UserDTO
+                {
+                    ID = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                },
+                Token = token
             };
         }
 

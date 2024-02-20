@@ -57,5 +57,23 @@ namespace AnyaStore.Services.AuthAPI.Controllers
             _response.Result = result;
             return Ok(_response);
         }
+
+        [HttpPost("AssignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDTO request)
+        {
+            // Email is used as UserName
+            var result = await _authService.AssignRole(request.Email, request.Role.ToUpper());
+            if (!result)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = new List<string> { "Failed to assign role" };
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(_response);
+            }
+
+            _response.StatusCode = HttpStatusCode.OK;
+            _response.Result = "Role assigned successfully!";
+            return Ok(_response);
+        }
     }
 }

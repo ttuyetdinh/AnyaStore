@@ -10,5 +10,6 @@ namespace AnyaStore.Services.AuthAPI.Services.IServices
     {
         Task<string> Register(RegistrationRequestDTO request);
         Task<LoginResponseDTO> Login(LoginRequestDTO request);
+        Task<bool> AssignRole(string userName, string roleName);
     }
 }
