@@ -20,6 +20,14 @@ namespace AnyaStore.Web.Ultilities
             MultipartFormData
         };
 
+        public enum Role
+        {
+            Admin,
+            User,
+            CustomRole
+        };
+
+
         public static string CouponAPIBase { get; set; }
         public static string AuthAPIBase { get; set; }
     }

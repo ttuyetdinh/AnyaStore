@@ -55,6 +55,10 @@ namespace AnyaStore.Web.Services
                         case HttpStatusCode.InternalServerError:
                             finalResponseDTO.ErrorMessage = new List<string>() { "Internal server error" };
                             break;
+                        case HttpStatusCode.BadRequest:
+                            var error = await response.Content.ReadAsStringAsync();
+                            finalResponseDTO.ErrorMessage = new List<string> { JsonConvert.DeserializeObject<ResponseDTO>(error).ToString() };
+                            break;
                         default:
                             var apiContent = await response.Content.ReadAsStringAsync();
                             finalResponseDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
