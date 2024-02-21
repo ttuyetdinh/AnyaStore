@@ -55,7 +55,7 @@ namespace AnyaStore.Web.Services
                             _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
                             break;
                         case HttpStatusCode.Unauthorized:
-                            finalResponseDTO.ErrorMessage = new List<string>() { "Unauthorized" };
+                            finalResponseDTO.ErrorMessage = new List<string>() { "Unauthorized", };
                             _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
                             break;
                         case HttpStatusCode.InternalServerError:
@@ -64,7 +64,7 @@ namespace AnyaStore.Web.Services
                             break;
                         case HttpStatusCode.BadRequest:
                             var error = await response.Content.ReadAsStringAsync();
-                            finalResponseDTO.ErrorMessage = new List<string> { JsonConvert.DeserializeObject<ResponseDTO>(error).ToString() };
+                            finalResponseDTO = JsonConvert.DeserializeObject<ResponseDTO>(error);
                             _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
                             break;
                         default:

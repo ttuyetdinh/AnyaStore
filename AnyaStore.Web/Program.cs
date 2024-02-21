@@ -1,12 +1,15 @@
 using AnyaStore.Web.Services;
 using AnyaStore.Web.Services.IServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 // add DI
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 
 builder.Services.AddHttpClient<ICouponService, CouponService>();
@@ -16,6 +19,19 @@ builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddTransient<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+        options.SlidingExpiration = true;
+
+        options.Cookie.Name = "Anyastore.Cookie";
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Home/AccessDenied";
+    });
 
 var app = builder.Build();
 
