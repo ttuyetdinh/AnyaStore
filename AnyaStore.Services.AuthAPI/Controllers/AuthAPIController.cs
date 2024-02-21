@@ -23,6 +23,12 @@ namespace AnyaStore.Services.AuthAPI.Controllers
         }
 
 
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            _response.Result = "Auth API is working";
+            return Ok(_response);
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDTO request)
@@ -58,11 +64,11 @@ namespace AnyaStore.Services.AuthAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpPost("AssignRole")]
+        [HttpPost("assignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDTO request)
         {
             // Email is used as UserName
-            var result = await _authService.AssignRole(request.Email, request.Role.ToUpper());
+            var result = await _authService.AssignRole(request.Email, request.Role.ToString().ToUpper());
             if (!result)
             {
                 _response.IsSuccess = false;
