@@ -37,38 +37,58 @@ namespace AnyaStore.Web.Services
                 var message = _apiMessageRequestBuilder.Build(requestDTO);
 
                 var response = await client.SendAsync(message);
+                var apiContent = await response.Content.ReadAsStringAsync();
 
                 ResponseDTO finalResponseDTO = new()
                 {
                     IsSuccess = false
                 };
+
                 try
                 {
                     switch (response.StatusCode)
                     {
                         case HttpStatusCode.NotFound:
+                            finalResponseDTO.StatusCode = HttpStatusCode.NotFound;
                             finalResponseDTO.ErrorMessage = new List<string>() { "Not found" };
-                            _logger.LogError($"{requestDTO.ApiType} {requestDTO.Url}", finalResponseDTO.ErrorMessage);
+                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {apiContent}");
                             break;
+
                         case HttpStatusCode.Forbidden:
+                            finalResponseDTO.StatusCode = HttpStatusCode.Forbidden;
                             finalResponseDTO.ErrorMessage = new List<string>() { "Access denied" };
-                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
+                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {apiContent}");
                             break;
+
                         case HttpStatusCode.Unauthorized:
+                            finalResponseDTO.StatusCode = HttpStatusCode.Unauthorized;
                             finalResponseDTO.ErrorMessage = new List<string>() { "Unauthorized", };
-                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
+                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {apiContent}");
                             break;
+
                         case HttpStatusCode.InternalServerError:
+                            finalResponseDTO.StatusCode = HttpStatusCode.InternalServerError;
                             finalResponseDTO.ErrorMessage = new List<string>() { "Internal server error" };
-                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
+                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {apiContent}");
                             break;
+
                         case HttpStatusCode.BadRequest:
-                            var error = await response.Content.ReadAsStringAsync();
-                            finalResponseDTO = JsonConvert.DeserializeObject<ResponseDTO>(error);
-                            _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
+                            var tempDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
+                            finalResponseDTO.StatusCode = HttpStatusCode.BadRequest;
+
+                            if (tempDTO == null || tempDTO.StatusCode == 0)
+                            {
+                                finalResponseDTO.ErrorMessage = new List<string> { "Bad Request" };
+                                _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {apiContent}");
+                            }
+                            else
+                            {
+                                finalResponseDTO = tempDTO;
+                                _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage.FirstOrDefault()}");
+                            }
                             break;
+
                         default:
-                            var apiContent = await response.Content.ReadAsStringAsync();
                             finalResponseDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
                             finalResponseDTO.IsSuccess = true;
                             _logger.LogInformation($"{requestDTO.ApiType}, {requestDTO.Url}: Response received successfully.");
@@ -79,7 +99,7 @@ namespace AnyaStore.Web.Services
                 catch (Exception e)
                 {
                     finalResponseDTO.ErrorMessage = new List<string>() { "Error countered:", e.Message.ToString() };
-                    _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage}");
+                    _logger.LogError($"{requestDTO.ApiType}, {requestDTO.Url}: {finalResponseDTO.ErrorMessage.FirstOrDefault()}");
                 }
 
                 return (T)(object)finalResponseDTO;

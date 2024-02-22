@@ -5,30 +5,32 @@
         <div class="row text-center">
             <h1>Register</h1>
         </div>
-        <div class="row text-center">
-            <div asp-asp-validation-summary="All" class="text-danger"></div>
-        </div>
         <div class="row">
             <div class="col-6 offset-3 pb-2">
                 <input asp-for="Email" type="text" class="form-control" placeholder="Email (Username) ..." />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="col-6 offset-3 pb-2">
                 <input asp-for="Name" type="text" class="form-control" placeholder="Name ..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="col-6 offset-3 pb-2">
                 <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Phone Number ..." />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
 
             <div class="col-6 offset-3 pb-2">
                 <input asp-for="Password" type="text" class="form-control" placeholder="Password ..." />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="col-6 offset-3 pb-2">
                 <select asp-for="Role" class="form-select" asp-items="@ViewBag.RoleList">
                     <option selected disabled>--Select Role--</option>
                 </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
             </div>
 
             <div class="col-6 offset-3 pb-2">

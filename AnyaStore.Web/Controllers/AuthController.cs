@@ -53,7 +53,7 @@ namespace AnyaStore.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ModelState.AddModelError("CustomError", "Invalid username or password");
+            TempData["error"] = "Wrong username or password";
 
             return View(model);
         }
@@ -90,6 +90,10 @@ namespace AnyaStore.Web.Controllers
                     return RedirectToAction("login");
                 }
             }
+            else
+            {
+                TempData["error"] = result.ErrorMessage.FirstOrDefault();
+            }
 
             // repopulate the role list, alternative method
             ViewBag.RoleList = Enum
@@ -115,9 +119,15 @@ namespace AnyaStore.Web.Controllers
             var jwt = handler.ReadJsonWebToken(authUser.Token);
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.GetClaim(JwtRegisteredClaimNames.Email).ToString()));
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.GetClaim(JwtRegisteredClaimNames.Sub).ToString()));
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.GetClaim(JwtRegisteredClaimNames.Name).ToString()));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.GetClaim(JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.GetClaim(JwtRegisteredClaimNames.Sub).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.GetClaim(JwtRegisteredClaimNames.Name).Value));
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, jwt.GetClaim(JwtRegisteredClaimNames.Name).Value));
+            // add mutiple roles
+            jwt.Claims.Where(x => x.Type == ClaimTypes.Role)
+                        .ToList()
+                        .ForEach(role => identity.AddClaim(new Claim(ClaimTypes.Role, role.Value)));
 
             var principal = new ClaimsPrincipal(identity);
 
