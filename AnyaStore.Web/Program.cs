@@ -28,7 +28,7 @@ builder.Services
         options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
         options.SlidingExpiration = true;
 
-        options.Cookie.Name = "Anyastore.Cookie";
+        options.Cookie.Name = "Anyastore.Web.Cookie";
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Home/AccessDenied";
     });

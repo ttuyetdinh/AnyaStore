@@ -46,18 +46,21 @@ namespace AnyaStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CouponCreate(CouponDTO coupon)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var response = await _couponService.CreateAsync<ResponseDTO>(coupon);
-
-                if (response != null && response.IsSuccess)
-                {   
-                    TempData["success"] = "Coupon created successfully!";
-                    return RedirectToAction(nameof(CouponIndex));
-                }
+                TempData["error"] = "Coupon creation failed!";
+                return View(coupon);
             }
 
-            TempData["error"] = "Coupon creation failed!";
+            var response = await _couponService.CreateAsync<ResponseDTO>(coupon);
+
+            if (response?.IsSuccess == true)
+            {
+                TempData["success"] = "Coupon created successfully!";
+                return RedirectToAction(nameof(CouponIndex));
+            }
+
+            TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
             return View(coupon);
         }
 
@@ -68,20 +71,14 @@ namespace AnyaStore.Web.Controllers
             var response = await _couponService.DeleteAsync<ResponseDTO>(couponId);
 
             if (response != null && response.IsSuccess)
-            {   
+            {
                 TempData["success"] = "Coupon deleted successfully!";
                 return RedirectToAction(nameof(CouponIndex));
 
             }
-            
+
             TempData["error"] = "Coupon deletion failed!";
             return RedirectToAction(nameof(CouponIndex));
         }
-
-        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        // public IActionResult Error()
-        // {
-        //     return View("Error!");
-        // }
     }
 }
