@@ -9,7 +9,7 @@ namespace AnyaStore.Web.Services.IServices
     public interface IBaseService
     {
         string BaseUrl { get; }
-        Task<T> SendAsync<T>(RequestDTO requestDTO);
+        Task<T> SendAsync<T>(RequestDTO requestDTO, bool withBearer = true);
         void SetBaseUrl(string baseUrl);
     }
 }

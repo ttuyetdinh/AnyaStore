@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AnyaStore.Web.Models.DTO;
 using AnyaStore.Web.Services.IServices;
@@ -15,26 +16,36 @@ namespace AnyaStore.Web.Services
         public IHttpClientFactory _httpClientFactory { get; set; }
         public IApiMessageRequestBuilder _apiMessageRequestBuilder { get; set; }
         public string BaseUrl { get; private set; }
-
         private readonly ILogger<BaseService> _logger;
+        private readonly ITokenProvider _tokenProvider;
 
-        public BaseService(IHttpClientFactory httpClientFactory, IApiMessageRequestBuilder apiMessageRequestBuilder, IConfiguration configuration, ILogger<BaseService> logger)
+        public BaseService(IHttpClientFactory httpClientFactory, IApiMessageRequestBuilder apiMessageRequestBuilder, IConfiguration configuration, ILogger<BaseService> logger, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
             _apiMessageRequestBuilder = apiMessageRequestBuilder;
             _logger = logger;
+            _tokenProvider = tokenProvider;
         }
         public void SetBaseUrl(string baseUrl)
         {
             BaseUrl = baseUrl ?? "";
         }
-        public async Task<T> SendAsync<T>(RequestDTO requestDTO)
+        public async Task<T> SendAsync<T>(RequestDTO requestDTO, bool withBearer = true)
         {
             try
             {
                 var client = _httpClientFactory.CreateClient("AnyaStoreAPI");
 
                 var message = _apiMessageRequestBuilder.Build(requestDTO);
+                // add bearer token
+                if (withBearer)
+                {
+                    var token = _tokenProvider.GetToken();
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    }
+                }
 
                 var response = await client.SendAsync(message);
                 var apiContent = await response.Content.ReadAsStringAsync();

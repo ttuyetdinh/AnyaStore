@@ -38,7 +38,7 @@ namespace AnyaStore.Web.Services
                 ApiType = SD.ApiType.POST,
                 Data = dto,
                 Url = $"{authUrl}/api/AuthAPI/login",
-            });
+            }, withBearer: false);
         }
 
         public async Task<T> Register<T>(RegistrationRequestDTO dto)
@@ -48,7 +48,7 @@ namespace AnyaStore.Web.Services
                 ApiType = SD.ApiType.POST,
                 Data = dto,
                 Url = $"{authUrl}/api/AuthAPI/register",
-            });
+            }, withBearer: false);
         }
     }
 }
