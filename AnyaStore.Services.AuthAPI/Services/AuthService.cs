@@ -57,7 +57,8 @@ namespace AnyaStore.Services.AuthAPI.Services
             }
 
             // if user valid, generate JWT token
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             return new LoginResponseDTO
             {
@@ -79,7 +80,7 @@ namespace AnyaStore.Services.AuthAPI.Services
                 UserName = request.Email,
                 Email = request.Email,
                 NormalizedEmail = request.Email.ToUpper(),
-                Name = request.Name,
+                Name = request.Name ?? request.Email.Split('@').FirstOrDefault(),
                 PhoneNumber = request.PhoneNumber
             };
 

@@ -21,7 +21,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // add config password for Identity User
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequiredLength = 1;
+    options.Password.RequiredLength = 3;
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;

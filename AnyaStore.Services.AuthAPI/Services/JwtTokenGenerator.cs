@@ -22,7 +22,7 @@ namespace AnyaStore.Services.AuthAPI.Services
         {
             _jwtOptions = jwtOptions.Value;
         }
-        public string GenerateToken(ApplicationUser user)
+        public string GenerateToken(ApplicationUser user, IEnumerable<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             string secretStr = _jwtOptions.SecretKey.Length < 32 ? string.Concat(KeyPrefix, _jwtOptions.SecretKey.ToString()) : _jwtOptions.SecretKey.ToString();
@@ -34,8 +34,10 @@ namespace AnyaStore.Services.AuthAPI.Services
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Name, user.Name),
+                new Claim(JwtRegisteredClaimNames.Name, user.Name ?? ""),
             };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
