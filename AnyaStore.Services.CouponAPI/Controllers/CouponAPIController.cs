@@ -7,6 +7,7 @@ using AnyaStore.Services.CouponAPI.Models;
 using AnyaStore.Services.CouponAPI.Models.DTO;
 using AnyaStore.Services.CouponAPI.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnyaStore.Services.CouponAPI.Controllers
@@ -123,6 +124,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
 
         // create a http post to insert new coupon
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCoupon([FromBody] CouponDTO couponDTO)
         {
             try
