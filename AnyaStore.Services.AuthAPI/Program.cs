@@ -28,7 +28,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
 });
 // binding the JWT settings from the application's configuration to the JwtOptions class. 
-// This allows the settings to be injected and used elsewhere in the application, such as in the code that generates or validates JWTs.
+// This allows the settings to be injected(via DI) and used elsewhere in the application, such as in the code that generates or validates JWTs.
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("APISettings:JwtOptions"));
 
 // Add DI services
