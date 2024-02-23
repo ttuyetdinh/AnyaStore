@@ -124,8 +124,11 @@ namespace AnyaStore.Web.Controllers
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.GetClaim(JwtRegisteredClaimNames.Name).Value));
 
             identity.AddClaim(new Claim(ClaimTypes.Name, jwt.GetClaim(JwtRegisteredClaimNames.Name).Value));
-            // add mutiple roles
-            jwt.Claims.Where(x => x.Type == ClaimTypes.Role)
+
+
+            // http://schemas.microsoft.com/ws/2008/06/identity/claims/role will be shortened to "role"
+            // after the token is generated via JwtSecurityTokenHandler.CreateToken()
+            jwt.Claims.Where(x => x.Type == "role")
                         .ToList()
                         .ForEach(role => identity.AddClaim(new Claim(ClaimTypes.Role, role.Value)));
 

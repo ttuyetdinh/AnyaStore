@@ -12,7 +12,7 @@ namespace AnyaStore.Services.CouponAPI.Extensions
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static void AddAppAuthentication(this WebApplicationBuilder builder)
+        public static void AddAppAuthentication(this IHostApplicationBuilder builder)
         {
             builder.Services
             .AddAuthentication(x =>

@@ -68,7 +68,7 @@ namespace AnyaStore.Services.AuthAPI.Controllers
         public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDTO request)
         {
             // Email is used as UserName
-            var result = await _authService.AssignRole(request.Email, request.Role.ToString().ToUpper());
+            var result = await _authService.AssignRole(request.Email, request.Role.ToString());
             if (!result)
             {
                 _response.IsSuccess = false;

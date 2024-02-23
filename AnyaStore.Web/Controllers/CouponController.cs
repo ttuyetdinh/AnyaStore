@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnyaStore.Web.Models.DTO;
 using AnyaStore.Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using static AnyaStore.Web.Ultilities.SD;
 
 namespace AnyaStore.Web.Controllers
 {
@@ -20,10 +22,11 @@ namespace AnyaStore.Web.Controllers
             _couponService = couponService;
         }
 
+        [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.User)}")]
         public async Task<IActionResult> CouponIndex()
         {
             List<CouponDTO>? coupons = new();
-
+            var claims = User.Claims.ToList();
             var response = await _couponService.GetAllAsync<ResponseDTO>();
 
             if (response != null && response.IsSuccess)
@@ -32,11 +35,12 @@ namespace AnyaStore.Web.Controllers
                 return View(coupons);
             }
 
-            TempData["error"] = response?.ErrorMessage;
-            return NotFound();
+            TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
+            return View(coupons);
 
         }
 
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> CouponCreate()
         {
             return View();
@@ -44,6 +48,7 @@ namespace AnyaStore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> CouponCreate(CouponDTO coupon)
         {
             if (!ModelState.IsValid)
@@ -66,6 +71,7 @@ namespace AnyaStore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> CouponDelete(int couponId)
         {
             var response = await _couponService.DeleteAsync<ResponseDTO>(couponId);
@@ -77,7 +83,7 @@ namespace AnyaStore.Web.Controllers
 
             }
 
-            TempData["error"] = "Coupon deletion failed!";
+            TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
             return RedirectToAction(nameof(CouponIndex));
         }
     }

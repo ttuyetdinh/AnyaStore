@@ -9,6 +9,7 @@ using AnyaStore.Services.CouponAPI.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static AnyaStore.Services.CouponAPI.Ultilities.SD;
 
 namespace AnyaStore.Services.CouponAPI.Controllers
 {
@@ -29,6 +30,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> GetCoupons()
         {
             try
@@ -54,6 +56,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<IActionResult> GetCoupon(int id)
         {
             try
@@ -88,6 +91,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet("GetByCode/{code}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<IActionResult> GetCouponByCode(string code)
         {
             try
@@ -124,7 +128,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
 
         // create a http post to insert new coupon
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> CreateCoupon([FromBody] CouponDTO couponDTO)
         {
             try
@@ -151,6 +155,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
 
         // create a http put to update coupon
         [HttpPut]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> UpdateCoupon([FromBody] CouponDTO couponDTO)
         {
             try
@@ -185,8 +190,10 @@ namespace AnyaStore.Services.CouponAPI.Controllers
                 return BadRequest(_responseDTO);
             }
         }
+
         // create a http delete to delete coupon
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> DeleteCoupon(int id)
         {
             try

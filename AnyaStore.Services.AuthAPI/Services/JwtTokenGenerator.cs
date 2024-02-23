@@ -52,6 +52,8 @@ namespace AnyaStore.Services.AuthAPI.Services
 
             };
 
+            // http://schemas.microsoft.com/ws/2008/06/identity/claims/role will be shortened to "role"
+            // after the token is generated via JwtSecurityTokenHandler.CreateToken()
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
