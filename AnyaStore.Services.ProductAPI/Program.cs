@@ -1,6 +1,8 @@
 using AnyaStore.Services.ProductAPI;
 using AnyaStore.Services.ProductAPI.Data;
 using AnyaStore.Services.ProductAPI.Extensions;
+using AnyaStore.Services.ProductAPI.Repository;
+using AnyaStore.Services.ProductAPI.Repository.IRepository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// add DI
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // explicit control over the creation and registration of the IMapper instance
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
