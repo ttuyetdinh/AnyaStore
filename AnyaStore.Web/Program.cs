@@ -18,6 +18,9 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddHttpClient<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddTransient<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
 
 builder.Services
