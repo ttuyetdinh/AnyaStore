@@ -31,7 +31,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ResponseDTO>> GetProducts()
         {
             try
@@ -57,7 +58,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetProduct(int id)
         {
             try
@@ -92,7 +94,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         }
 
         [HttpGet("GetByCategory/{id:int}")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetProductByCategory(int id)
         {
             try
@@ -130,7 +133,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
 
         // create a http post to insert new product
         [HttpPost]
-        // [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
         {
             try
@@ -157,7 +161,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
 
         // create a http put to update product
         [HttpPut]
-        // [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO productDTO)
         {
             try
@@ -195,7 +200,8 @@ namespace AnyaStore.Services.ProductAPI.Controllers
 
         // create a http delete to delete product
         [HttpDelete("{id:int}")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)}")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             try
