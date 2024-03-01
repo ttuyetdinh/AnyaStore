@@ -6,13 +6,12 @@ using AnyaStore.Web.Models.DTO;
 
 namespace AnyaStore.Web.Services.IServices
 {
-    public interface IProductService
+    public interface ICategoryService
     {
         Task<T> GetAllAsync<T>();
         Task<T> GetAsync<T>(int id);
-        Task<T> GetByCategoryAsync<T>(int id);
-        Task<T> CreateAsync<T>(ProductDTO dto);
-        Task<T> UpdateAsync<T>(ProductDTO dto);
+        Task<T> CreateAsync<T>(CategoryDTO dto);
+        Task<T> UpdateAsync<T>(CategoryDTO dto);
         Task<T> DeleteAsync<T>(int id);
     }
 }

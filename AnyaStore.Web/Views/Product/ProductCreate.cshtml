@@ -1,4 +1,4 @@
-@model AnyaStore.Web.Models.DTO.ProductDTO
+@model AnyaStore.Web.Models.ViewModel.ProductCreateVM
 
 <form asp-action="ProductCreate">
     <br />
@@ -15,10 +15,10 @@
                 <label class="control-label pt-2" style="font-size:20px;"> Category</label>
             </div>
             <div class="col-10 pb-2">
-                <select asp-for="CategoryId" class="form-select" asp-items="@ViewBag.Categories">
+                <select asp-for="Product.CategoryId" class="form-select" asp-items="@Model.Categories">
                     <option selected disabled>--Select Category--</option>
                 </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
             </div>
 
             @* Name input *@
@@ -26,8 +26,8 @@
                 <label class="control-label pt-2" style="font-size:20px;">Name</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Product.Name" class="form-control" />
+                <span asp-validation-for="Product.Name" class="text-danger"></span>
             </div>
 
             @* Description input *@
@@ -35,8 +35,8 @@
                 <label class="control-label pt-2" style="font-size:20px;">Description</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <input asp-for="Product.Description" class="form-control" />
+                <span asp-validation-for="Product.Description" class="text-danger"></span>
             </div>
 
 
@@ -45,8 +45,8 @@
                 <label class="control-label pt-2" style="font-size:20px;">Price</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <input asp-for="Product.Price" class="form-control" />
+                <span asp-validation-for="Product.Price" class="text-danger"></span>
             </div>
 
 
@@ -55,8 +55,8 @@
                 <label class="control-label pt-2" style="font-size:20px;">ImageUrl</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <input asp-for="Product.ImageUrl" class="form-control" />
+                <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
             </div>
 
             @* button control *@

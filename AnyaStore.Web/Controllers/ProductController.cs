@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AnyaStore.Web.Models.DTO;
+using AnyaStore.Web.Models.ViewModel;
 using AnyaStore.Web.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using static AnyaStore.Web.Ultilities.SD;
@@ -16,10 +18,12 @@ namespace AnyaStore.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.User)}")]
@@ -43,21 +47,25 @@ namespace AnyaStore.Web.Controllers
         [Authorize(Roles = $"{nameof(Role.Admin)}")]
         public async Task<IActionResult> ProductCreate()
         {
-            return View();
+            var categories = await _categoryService.GetAllAsync<ResponseDTO>();
+            var productCreateVM = new ProductCreateVM();
+            productCreateVM = await PopulateCategories(productCreateVM);
+            return View(productCreateVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = $"{nameof(Role.Admin)}")]
-        public async Task<IActionResult> ProductCreate(ProductDTO product)
+        public async Task<IActionResult> ProductCreate(ProductCreateVM model)
         {
             if (!ModelState.IsValid)
             {
                 TempData["error"] = "Product creation failed!";
-                return View(product);
+                model = await PopulateCategories(model);
+                return View(model);
             }
 
-            var response = await _productService.CreateAsync<ResponseDTO>(product);
+            var response = await _productService.CreateAsync<ResponseDTO>(model.Product);
 
             if (response?.IsSuccess == true)
             {
@@ -66,7 +74,10 @@ namespace AnyaStore.Web.Controllers
             }
 
             TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
-            return View(product);
+
+            // repopulate the categories
+            model = await PopulateCategories(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -85,6 +96,32 @@ namespace AnyaStore.Web.Controllers
 
             TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
             return RedirectToAction(nameof(ProductIndex));
+        }
+
+
+        // helper methods
+        private async Task<ProductCreateVM> PopulateCategories(ProductCreateVM model)
+        {
+            try
+            {
+                var categories = await _categoryService.GetAllAsync<ResponseDTO>();
+                if (categories != null && categories.IsSuccess)
+                {
+                    model.Categories = JsonConvert
+                        .DeserializeObject<List<CategoryDTO>>(Convert.ToString(categories.Result))
+                        .Select(i => new SelectListItem
+                        {
+                            Text = i.Name,
+                            Value = i.CategoryId.ToString()
+                        });
+                }
+            }
+            catch (Exception e)
+            {
+
+                model.Categories = new List<SelectListItem>();
+            }
+            return model;
         }
     }
 }

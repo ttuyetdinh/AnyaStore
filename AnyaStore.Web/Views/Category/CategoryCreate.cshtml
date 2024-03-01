@@ -1,0 +1,43 @@
+@model AnyaStore.Web.Models.DTO.CategoryDTO
+
+<form asp-action="CategoryCreate">
+    <br />
+    <div class="container border p-3 col-10">
+        <div class="card-header bg-info bg-gradient ml-0 py-3">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Category Create</h1>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+
+            @* Name input *@
+            <div class="col-2">
+                <label class="control-label pt-2" style="font-size:20px;">Name</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            @* button control *@
+            <div class="col-5 offset-2">
+                <a asp-action="CategoryIndex" class="btn-primary btn form-control ">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+
+            </div>
+
+        </div>
+
+        <div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
