@@ -30,7 +30,6 @@ namespace AnyaStore.Web.Controllers
         public async Task<IActionResult> ProductIndex()
         {
             List<ProductDTO>? products = new();
-            var claims = User.Claims.ToList();
             var response = await _productService.GetAllAsync<ResponseDTO>();
 
             if (response != null && response.IsSuccess)
@@ -96,6 +95,21 @@ namespace AnyaStore.Web.Controllers
 
             TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
             return RedirectToAction(nameof(ProductIndex));
+        }
+
+        public async Task<IActionResult> ProductDetail(int productId)
+        {
+            var response = await _productService.GetAsync<ResponseDTO>(productId);
+
+            if (response != null && response.IsSuccess)
+            {
+                var product = JsonConvert.DeserializeObject<ProductDTO>(Convert.ToString(response.Result));
+                return View(product);
+            }
+
+            // TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
+            TempData["error"] = "You have to login to view the product details!";
+            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
         }
 
 

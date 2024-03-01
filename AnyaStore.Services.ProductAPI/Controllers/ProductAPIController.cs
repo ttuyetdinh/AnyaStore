@@ -31,7 +31,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ResponseDTO>> GetProducts()
         {
