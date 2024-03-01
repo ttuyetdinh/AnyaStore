@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // add DI
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // explicit control over the creation and registration of the IMapper instance
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

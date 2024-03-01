@@ -15,6 +15,7 @@ namespace AnyaStore.Services.ProductAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<Product, ProductDTO>().ReverseMap();
+                config.CreateMap<Category, CategoryDTO>().ReverseMap();
             });
 
             return mappingConfig;

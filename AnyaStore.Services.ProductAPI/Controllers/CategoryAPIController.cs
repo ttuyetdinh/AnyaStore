@@ -16,15 +16,15 @@ namespace AnyaStore.Services.ProductAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductAPIController : ControllerBase
+    public class CategoryAPIController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private ResponseDTO _responseDTO;
         private readonly IMapper _mapper;
 
-        public ProductAPIController(IProductRepository productRepository, IMapper mapper)
+        public CategoryAPIController(ICategoryRepository categoryRepository, IMapper mapper)
         {
-            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
             _responseDTO = new ResponseDTO();
             _mapper = mapper;
 
@@ -33,15 +33,14 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         [HttpGet]
         [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ResponseDTO>> GetProducts()
+        public async Task<ActionResult<ResponseDTO>> GetCategories()
         {
             try
             {
-                var includeProperties = "Category";
-                var products = await _productRepository.GetAllAsync(includeProperties: includeProperties);
-                var productsDTO = _mapper.Map<List<ProductDTO>>(products);
+                var categories = await _categoryRepository.GetAllAsync();
+                var categoriesDTO = _mapper.Map<List<CategoryDTO>>(categories);
 
-                _responseDTO.Result = productsDTO;
+                _responseDTO.Result = categoriesDTO;
                 _responseDTO.StatusCode = HttpStatusCode.OK;
 
                 return Ok(_responseDTO);
@@ -49,7 +48,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the products.",
+                    "An error occurred while retrieving the categories.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;
@@ -61,24 +60,23 @@ namespace AnyaStore.Services.ProductAPI.Controllers
         [HttpGet("{id:int}")]
         [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetProduct(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
             try
             {
-                var includeProperties = "Category";
-                var product = await _productRepository.GetAsync(i => i.ProductId == id, includeProperties: includeProperties);
-                var productDTO = _mapper.Map<ProductDTO>(product);
+                var category = await _categoryRepository.GetAsync(i => i.CategoryId == id);
+                var categoryDTO = _mapper.Map<CategoryDTO>(category);
 
-                // check if product exists
-                if (productDTO == null)
+                // check if category exists
+                if (categoryDTO == null)
                 {
-                    _responseDTO.ErrorMessage = new List<string>() { "Product not found." };
+                    _responseDTO.ErrorMessage = new List<string>() { "Category not found." };
                     _responseDTO.IsSuccess = false;
                     _responseDTO.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_responseDTO);
                 }
 
-                _responseDTO.Result = productDTO;
+                _responseDTO.Result = categoryDTO;
                 _responseDTO.StatusCode = HttpStatusCode.OK;
 
                 return Ok(_responseDTO);
@@ -86,7 +84,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the products.",
+                    "An error occurred while retrieving the categories.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;
@@ -95,57 +93,18 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             }
         }
 
-        [HttpGet("GetByCategory/{id:int}")]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetProductByCategory(int id)
-        {
-            try
-            {
-                var includeProperties = "Category";
-                var products = await _productRepository.GetAllAsync(i => i.CategoryId == id, includeProperties: includeProperties);
-
-                var productsDTO = _mapper.Map<List<ProductDTO>>(products);
-
-                // check if product exists
-                if (productsDTO.Count == 0)
-                {
-                    _responseDTO.ErrorMessage = new List<string>() { "Product not found." };
-                    _responseDTO.IsSuccess = false;
-                    _responseDTO.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(_responseDTO);
-                }
-
-                _responseDTO.Result = productsDTO;
-                _responseDTO.StatusCode = HttpStatusCode.OK;
-
-                return Ok(_responseDTO);
-            }
-            catch (Exception ex)
-            {
-                _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the products.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                };
-                _responseDTO.IsSuccess = false;
-                _responseDTO.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(_responseDTO);
-            }
-        }
-
-
-        // create a http post to insert new product
+        // create a http post to insert new category
         [HttpPost]
         [Authorize(Roles = $"{nameof(Role.Admin)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
-                var product = _mapper.Map<Product>(productDTO);
-                await _productRepository.CreateAsync(product);
+                var category = _mapper.Map<Category>(categoryDTO);
+                await _categoryRepository.CreateAsync(category);
 
-                _responseDTO.Result = _mapper.Map<ProductDTO>(product);
+                _responseDTO.Result = _mapper.Map<CategoryDTO>(category);
                 _responseDTO.StatusCode = HttpStatusCode.OK;
 
                 return Ok(_responseDTO);
@@ -153,7 +112,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while creating the product.",
+                    "An error occurred while creating the category.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;
@@ -162,29 +121,29 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             }
         }
 
-        // create a http put to update product
+        // create a http put to update category
         [HttpPut]
         [Authorize(Roles = $"{nameof(Role.Admin)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO productDTO)
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryDTO categoryDTO)
         {
             try
             {
-                var product = await _productRepository.GetAsync(i => i.ProductId == productDTO.ProductId);
-                if (product == null)
+                var category = await _categoryRepository.GetAsync(i => i.CategoryId == categoryDTO.CategoryId);
+                if (category == null)
                 {
-                    _responseDTO.ErrorMessage = new List<string>() { "Product not found." };
+                    _responseDTO.ErrorMessage = new List<string>() { "Category not found." };
                     _responseDTO.IsSuccess = false;
                     _responseDTO.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_responseDTO);
                 }
-                // this won' work becasue create a new instance of product which is not tracked by entity framework
-                // product = _mapper.Map<Product>(productDTO);
+                // this won' work becasue create a new instance of category which is not tracked by entity framework
+                // category = _mapper.Map<Category>(categoryDTO);
                 // use this instead
-                _mapper.Map(productDTO, product);
-                await _productRepository.UpdateAsync(product);
+                _mapper.Map(categoryDTO, category);
+                await _categoryRepository.UpdateAsync(category);
 
-                _responseDTO.Result = productDTO;
+                _responseDTO.Result = categoryDTO;
                 _responseDTO.StatusCode = HttpStatusCode.OK;
 
                 return Ok(_responseDTO);
@@ -192,7 +151,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while updating the product.",
+                    "An error occurred while updating the category.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;
@@ -201,23 +160,23 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             }
         }
 
-        // create a http delete to delete product
+        // create a http delete to delete category
         [HttpDelete("{id:int}")]
         [Authorize(Roles = $"{nameof(Role.Admin)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             try
             {
-                var product = await _productRepository.GetAsync(i => i.ProductId == id);
-                if (product == null)
+                var category = await _categoryRepository.GetAsync(i => i.CategoryId == id);
+                if (category == null)
                 {
-                    _responseDTO.ErrorMessage = new List<string>() { "Product not found." };
+                    _responseDTO.ErrorMessage = new List<string>() { "Category not found." };
                     _responseDTO.IsSuccess = false;
                     _responseDTO.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_responseDTO);
                 }
-                await _productRepository.RemoveAsync(product);
+                await _categoryRepository.RemoveAsync(category);
 
                 _responseDTO.Result = "Delete successful.";
                 _responseDTO.StatusCode = HttpStatusCode.OK;
@@ -227,7 +186,7 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while deleting the product.",
+                    "An error occurred while deleting the category.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;

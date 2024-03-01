@@ -13,6 +13,7 @@ namespace AnyaStore.Services.ProductAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         // create a seed method to add data to the database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +26,7 @@ namespace AnyaStore.Services.ProductAPI.Data
                 Price = 15,
                 Description = "Ultrabook gaming",
                 ImageUrl = "https://placehold.co/603x403",
-                // CategoryId = 1
+                CategoryId = 1
             });
             modelBuilder.Entity<Product>().HasData(new Product
             {
@@ -34,7 +35,7 @@ namespace AnyaStore.Services.ProductAPI.Data
                 Price = 15,
                 Description = "Ultrabook for working",
                 ImageUrl = "https://placehold.co/603x403",
-                // CategoryId = 2
+                CategoryId = 2
             });
             modelBuilder.Entity<Product>().HasData(new Product
             {
@@ -43,7 +44,23 @@ namespace AnyaStore.Services.ProductAPI.Data
                 Price = 15,
                 Description = "Ultrabook for business",
                 ImageUrl = "https://placehold.co/603x403",
-                // CategoryId = 2
+                CategoryId = 3
+            });
+
+            // seed category
+            modelBuilder.Entity<Category>().HasData(new Category
+            {
+                CategoryId = 1,
+                Name = "Bussiness Laptop"
+            });
+            modelBuilder.Entity<Category>().HasData(new Category
+            {
+                CategoryId = 2,
+                Name = "Gaming Laptop"
+            }); modelBuilder.Entity<Category>().HasData(new Category
+            {
+                CategoryId = 3,
+                Name = "Working Laptop"
             });
         }
     }

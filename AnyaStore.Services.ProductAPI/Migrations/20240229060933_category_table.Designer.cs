@@ -4,6 +4,7 @@ using AnyaStore.Services.ProductAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnyaStore.Services.ProductAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240229060933_category_table")]
+    partial class category_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,29 +46,6 @@ namespace AnyaStore.Services.ProductAPI.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6601),
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6600),
-                            Name = "Bussiness Laptop"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6616),
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6615),
-                            Name = "Gaming Laptop"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6627),
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6627),
-                            Name = "Working Laptop"
-                        });
                 });
 
             modelBuilder.Entity("AnyaStore.Services.ProductAPI.Models.Product", b =>
@@ -107,33 +87,30 @@ namespace AnyaStore.Services.ProductAPI.Migrations
                         new
                         {
                             ProductId = 1,
-                            CategoryId = 1,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6533),
+                            CreatedOn = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2271),
                             Description = "Ultrabook gaming",
                             ImageUrl = "https://placehold.co/603x403",
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6518),
+                            LastUpdated = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2252),
                             Name = "Zephyrus g16",
                             Price = 15.0
                         },
                         new
                         {
                             ProductId = 2,
-                            CategoryId = 2,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6572),
+                            CreatedOn = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2337),
                             Description = "Ultrabook for working",
                             ImageUrl = "https://placehold.co/603x403",
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6571),
+                            LastUpdated = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2336),
                             Name = "Macbook pro 16 m3",
                             Price = 15.0
                         },
                         new
                         {
                             ProductId = 3,
-                            CategoryId = 3,
-                            CreatedOn = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6585),
+                            CreatedOn = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2353),
                             Description = "Ultrabook for business",
                             ImageUrl = "https://placehold.co/603x403",
-                            LastUpdated = new DateTime(2024, 2, 29, 13, 17, 8, 174, DateTimeKind.Local).AddTicks(6585),
+                            LastUpdated = new DateTime(2024, 2, 29, 13, 9, 33, 431, DateTimeKind.Local).AddTicks(2352),
                             Name = "Dell XPS 16",
                             Price = 15.0
                         });
