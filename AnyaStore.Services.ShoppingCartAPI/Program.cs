@@ -17,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // add DI
+builder.Services.AddScoped<ICartDetailRepository, CartDetailsRepository>();
+builder.Services.AddScoped<ICartHeaderRepository, CartHeaderRepository>();
 
 
 // explicit control over the creation and registration of the IMapper instance

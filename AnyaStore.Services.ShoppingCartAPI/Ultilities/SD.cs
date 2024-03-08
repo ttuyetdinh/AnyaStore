@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AnyaStore.Services.ProductAPI.Ultilities
+namespace AnyaStore.Services.ShoppingCartAPI.Ultilities
 {
     public static class SD
     {
