@@ -14,6 +14,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Models
         public int CartHeaderId { get; set; } // foreign key
         public int ProductId { get; set; } // foreign key
         public int Count { get; set; }
+        public int Order { get; set; }
         public CartHeader CartHeader { get; set; } // included property
         [NotMapped]
         public ProductDTO Product { get; set; } // included property

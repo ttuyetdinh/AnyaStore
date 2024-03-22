@@ -18,5 +18,6 @@ namespace AnyaStore.Services.ShoppingCartAPI.Models
         public double CartTotal { get; set; }
         public DateTime? LastUpdated { get; set; } = DateTime.Now;
         public DateTime? CreatedOn { get; set; } = DateTime.Now;
+        public ICollection<CartDetails> CartDetails { get; set; }
     }
 }

@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace AnyaStore.Services.ShoppingCartAPI.Models.DTO
 {
-    public class CartDetailsDTO
+    public class CartDetailsRemoveDTO
     {
         public int CartDetailsId { get; set; }
         public int CartHeaderId { get; set; } // foreign key
-        public int ProductId { get; set; } // foreign key
-        public int Count { get; set; }
-        public int Order { get; set; }
-        public CartHeaderDTO? CartHeader { get; set; } // included property
-        public ProductDTO? Product { get; set; } // included property
     }
 }

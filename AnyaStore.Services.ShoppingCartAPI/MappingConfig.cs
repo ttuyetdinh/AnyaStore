@@ -16,6 +16,7 @@ namespace AnyaStore.Services.ShoppingCartAPI
             {
                 config.CreateMap<CartHeader, CartHeaderDTO>().ReverseMap();
                 config.CreateMap<CartDetails, CartDetailsDTO>().ReverseMap();
+                config.CreateMap<CartDetails, CartDetailsUpsertDTO>().ReverseMap();
             });
 
             return mappingConfig;

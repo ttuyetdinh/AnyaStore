@@ -4,6 +4,7 @@ using AnyaStore.Services.ShoppingCartAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnyaStore.Services.ShoppingCartAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240322093537_cartDetails_order_field")]
+    partial class cartDetails_order_field
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +44,6 @@ namespace AnyaStore.Services.ShoppingCartAPI.Migrations
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -83,17 +83,12 @@ namespace AnyaStore.Services.ShoppingCartAPI.Migrations
             modelBuilder.Entity("AnyaStore.Services.ShoppingCartAPI.Models.CartDetails", b =>
                 {
                     b.HasOne("AnyaStore.Services.ShoppingCartAPI.Models.CartHeader", "CartHeader")
-                        .WithMany("CartDetails")
+                        .WithMany()
                         .HasForeignKey("CartHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CartHeader");
-                });
-
-            modelBuilder.Entity("AnyaStore.Services.ShoppingCartAPI.Models.CartHeader", b =>
-                {
-                    b.Navigation("CartDetails");
                 });
 #pragma warning restore 612, 618
         }
