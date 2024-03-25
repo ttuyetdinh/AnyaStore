@@ -31,17 +31,27 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             _cartDetailRepository = cartDetailRepository;
         }
 
-        [HttpGet]
+        [HttpGet("{userId:int}")]
         // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ResponseDTO>> GetCart()
+        public async Task<ActionResult<ResponseDTO>> GetCart(string userId)
         {
             try
             {
-                var cartHeaders = await _cartHeaderRepository.GetAllAsync();
-                var cartHeadersDTO = _mapper.Map<List<CartHeaderDTO>>(cartHeaders);
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.UserId == userId, includeProperties: "CartDetails");
+                var cart = new CartDTO()
+                {
+                    CartHeader = _mapper.Map<CartHeaderDTO>(cartHeader),
+                    CartDetails = _mapper.Map<List<CartDetailsDTO>>(cartHeader.CartDetails)
+                };
 
-                _responseDTO.Result = cartHeadersDTO;
+                foreach (var item in cart.CartDetails)
+                {
+                    cart.CartHeader.CartTotal += item.Count * (item?.Product?.Price ?? 0);
+                }
+
+
+                _responseDTO.Result = cart;
                 _responseDTO.StatusCode = HttpStatusCode.OK;
 
                 return Ok(_responseDTO);
@@ -49,7 +59,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             catch (Exception ex)
             {
                 _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the cartHeaders.",
+                    "An error occurred while retrieving the cart.",
                     ex.InnerException != null ? ex.InnerException.Message : ex.Message
                 };
                 _responseDTO.IsSuccess = false;
@@ -59,7 +69,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("CartUpsert")]
-        public async Task<ActionResult<ResponseDTO>> CartUpsert(CartDTO entity)
+        public async Task<ActionResult<ResponseDTO>> CartUpsert(CartUpsertDTO entity)
         {
             try
             {
