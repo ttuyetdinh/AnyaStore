@@ -7,6 +7,7 @@ using AnyaStore.Services.ShoppingCartAPI.Migrations;
 using AnyaStore.Services.ShoppingCartAPI.Models;
 using AnyaStore.Services.ShoppingCartAPI.Models.DTO;
 using AnyaStore.Services.ShoppingCartAPI.Repository.IRepository;
+using AnyaStore.Services.ShoppingCartAPI.Services.IServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,15 +21,19 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
     {
         private readonly ICartHeaderRepository _cartHeaderRepository;
         private readonly ICartDetailRepository _cartDetailRepository;
+        private readonly IProductService _productService;
+        private readonly ICouponService _couponService;
         private ResponseDTO _responseDTO;
         private readonly IMapper _mapper;
 
-        public ShoppingCartAPIController(ICartHeaderRepository cartHeaderRepository, IMapper mapper, ICartDetailRepository cartDetailRepository)
+        public ShoppingCartAPIController(ICartHeaderRepository cartHeaderRepository, IMapper mapper, ICartDetailRepository cartDetailRepository, IProductService productService, ICouponService couponService)
         {
             _cartHeaderRepository = cartHeaderRepository;
             _responseDTO = new ResponseDTO();
             _mapper = mapper;
             _cartDetailRepository = cartDetailRepository;
+            _productService = productService;
+            _couponService = couponService;
         }
 
         [HttpGet("{userId:int}")]
@@ -45,11 +50,25 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
                     CartDetails = _mapper.Map<List<CartDetailsDTO>>(cartHeader.CartDetails)
                 };
 
+                var productList = await _productService.GetProducts();
+
                 foreach (var item in cart.CartDetails)
                 {
+                    item.CartHeader = null;
+                    item.Product = productList.FirstOrDefault(u => u.ProductId == item.ProductId);
                     cart.CartHeader.CartTotal += item.Count * (item?.Product?.Price ?? 0);
+
                 }
 
+                if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+                {
+                    var coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
+                    if (coupon != null && cart.CartHeader.CartTotal >= coupon.MinAmount)
+                    {
+                        cart.CartHeader.Discount = cart.CartHeader.CartTotal * (coupon.DiscountAmount ?? 0) / 100;
+                        cart.CartHeader.CartTotal -= cart.CartHeader.Discount;
+                    }
+                }
 
                 _responseDTO.Result = cart;
                 _responseDTO.StatusCode = HttpStatusCode.OK;
@@ -58,12 +77,65 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the cart.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                };
-                _responseDTO.IsSuccess = false;
-                _responseDTO.StatusCode = HttpStatusCode.BadRequest;
+                _responseDTO = ErrorResponse(ex);
+                return BadRequest(_responseDTO);
+            }
+        }
+
+        [HttpPost("ApplyCoupon")]
+        public async Task<ActionResult<ResponseDTO>> ApplyCoupon(CartHeaderDTO entity)
+        {
+            try
+            {
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == entity.CartHeaderId);
+                if (cartHeader == null)
+                {
+                    _responseDTO.ErrorMessage = new List<string> { "CartHeader not found." };
+                    _responseDTO.IsSuccess = false;
+                    _responseDTO.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_responseDTO);
+                }
+
+                cartHeader.CouponCode = entity.CouponCode;
+                await _cartHeaderRepository.UpdateAsync(cartHeader);
+
+                _responseDTO.Result = entity;
+                _responseDTO.StatusCode = HttpStatusCode.OK;
+                _responseDTO.IsSuccess = true;
+                return Ok(_responseDTO);
+            }
+            catch (Exception ex)
+            {
+                _responseDTO = ErrorResponse(ex);
+                return BadRequest(_responseDTO);
+            }
+        }
+
+        [HttpPost("{cartHeaderId:int}/RemoveCoupon")]
+        public async Task<ActionResult<ResponseDTO>> RemoveCoupon(int cartHeaderId)
+        {
+            try
+            {
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == cartHeaderId);
+                if (cartHeader == null)
+                {
+                    _responseDTO.ErrorMessage = new List<string> { "CartHeader not found." };
+                    _responseDTO.IsSuccess = false;
+                    _responseDTO.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_responseDTO);
+                }
+
+                cartHeader.CouponCode = "";
+                await _cartHeaderRepository.UpdateAsync(cartHeader);
+
+                _responseDTO.Result = cartHeader;
+                _responseDTO.StatusCode = HttpStatusCode.OK;
+                _responseDTO.IsSuccess = true;
+                return Ok(_responseDTO);
+            }
+            catch (Exception ex)
+            {
+                _responseDTO = ErrorResponse(ex);
                 return BadRequest(_responseDTO);
             }
         }
@@ -116,12 +188,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the cartHeaders.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                };
-                _responseDTO.IsSuccess = false;
-                _responseDTO.StatusCode = HttpStatusCode.BadRequest;
+                _responseDTO = ErrorResponse(ex);
                 return BadRequest(_responseDTO);
             }
         }
@@ -163,14 +230,23 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while remove the cartDetails.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                };
-                _responseDTO.IsSuccess = false;
-                _responseDTO.StatusCode = HttpStatusCode.BadRequest;
+                _responseDTO = ErrorResponse(ex);
                 return BadRequest(_responseDTO);
             }
+        }
+
+        // ultilities methos
+        private ResponseDTO ErrorResponse(Exception ex)
+        {
+            return new ResponseDTO
+            {
+                ErrorMessage = new List<string>() {
+                    "An error occurred while processing your request.",
+                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
+                },
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.BadRequest
+            };
         }
     }
 }

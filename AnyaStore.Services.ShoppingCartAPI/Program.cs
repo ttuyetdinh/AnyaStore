@@ -3,6 +3,8 @@ using AnyaStore.Services.ShoppingCartAPI.Data;
 using AnyaStore.Services.ShoppingCartAPI.Extensions;
 using AnyaStore.Services.ShoppingCartAPI.Repository;
 using AnyaStore.Services.ShoppingCartAPI.Repository.IRepository;
+using AnyaStore.Services.ShoppingCartAPI.Services;
+using AnyaStore.Services.ShoppingCartAPI.Services.IServices;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -20,6 +22,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ICartDetailRepository, CartDetailsRepository>();
 builder.Services.AddScoped<ICartHeaderRepository, CartHeaderRepository>();
 
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
+
+// config simple HttpClient for services
+builder.Services.AddHttpClient("Product", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+builder.Services.AddHttpClient("Coupon", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
 
 // explicit control over the creation and registration of the IMapper instance
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

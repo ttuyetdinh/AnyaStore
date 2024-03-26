@@ -91,7 +91,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet("GetByCode/{code}")]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<IActionResult> GetCouponByCode(string code)
         {
             try
