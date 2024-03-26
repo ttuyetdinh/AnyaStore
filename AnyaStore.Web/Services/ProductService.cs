@@ -13,7 +13,7 @@ namespace AnyaStore.Web.Services
         // private readonly IHttpClientFactory _clientFactory;
         private readonly IBaseService _baseService;
         private readonly string productUrl;
-        public ProductService(IHttpClientFactory clientFactory, IBaseService baseService, IConfiguration configuration)
+        public ProductService(IBaseService baseService, IConfiguration configuration)
         {
             // _clientFactory = clientFactory;
             _baseService = baseService;
