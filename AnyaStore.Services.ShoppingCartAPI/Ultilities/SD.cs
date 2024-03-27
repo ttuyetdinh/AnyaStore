@@ -26,8 +26,6 @@ namespace AnyaStore.Services.ShoppingCartAPI.Ultilities
             User,
             CustomRole
         };
-        public static string CouponAPIBase { get; set; }
-        public static string AuthAPIBase { get; set; }
         public static string AccessToken = "JWTToken";
         public static string RefreshToken = "RefreshToken";
     }

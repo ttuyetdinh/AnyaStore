@@ -9,10 +9,10 @@ namespace AnyaStore.Services.ShoppingCartAPI.Models.DTO
 {
     public class CartDetailsUpsertDTO
     {
-        public int CartDetailsId { get; set; }
-        public int CartHeaderId { get; set; } // foreign key
-        public int ProductId { get; set; } // foreign key
-        public int Count { get; set; }
-        public int Order { get; set; }
+        public int? CartDetailsId { get; set; }
+        public int? CartHeaderId { get; set; } // foreign key
+        public int? ProductId { get; set; } // foreign key
+        public int? Count { get; set; }
+        public int? Order { get; set; }
     }
 }

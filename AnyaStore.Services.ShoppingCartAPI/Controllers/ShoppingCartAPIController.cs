@@ -36,7 +36,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             _couponService = couponService;
         }
 
-        [HttpGet("{userId:int}")]
+        [HttpGet("GetCart/{userId}")]
         // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ResponseDTO>> GetCart(string userId)
@@ -147,7 +147,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             {
                 var cartDetailsDTO = entity.CartDetails.First();
 
-                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == entity.CartHeader.CartHeaderId, tracked: false, includeProperties: "CartDetails");
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.UserId == entity.CartHeader.UserId, tracked: false, includeProperties: "CartDetails");
                 if (cartHeader == null)
                 {
                     //  create a new cart header
