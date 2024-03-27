@@ -13,6 +13,7 @@ namespace AnyaStore.Web.Models.DTO
         public double? Price { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
+        public int Count { get; set; } = 1;
         public CategoryDTO? Category { get; set; }
     }
 }

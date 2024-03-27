@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using static AnyaStore.Web.Ultilities.SD;
 
@@ -19,11 +20,13 @@ namespace AnyaStore.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IShoppingCartService _cartService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public ProductController(IProductService productService, ICategoryService categoryService, IShoppingCartService cartService)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _cartService = cartService;
         }
 
         [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.User)}")]
@@ -95,6 +98,40 @@ namespace AnyaStore.Web.Controllers
 
             TempData["error"] = string.Join(", ", response?.ErrorMessage ?? new List<string>());
             return RedirectToAction(nameof(ProductIndex));
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ActionName(nameof(ProductDetail))]
+        public async Task<IActionResult> ProductDetail(ProductDTO productDTO)
+        {
+            var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub).FirstOrDefault()?.Value;
+            var cartDTO = new CartUpsertDTO()
+            {
+                CartHeader = new CartHeaderDTO()
+                {
+                    UserId = userId
+                },
+                CartDetails = new List<CartDetailsUpsertDTO>()
+                {
+                    new CartDetailsUpsertDTO()
+                    {
+                        ProductId = productDTO.ProductId,
+                        Count = productDTO.Count
+                    }
+                }
+
+            };
+            var response = await _cartService.CartUpsertAsync<ResponseDTO>(cartDTO);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Product added to cart successfully!";
+                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
+            }
+
+            TempData["error"] = "Error when adding product to cart!";
+            return await ProductDetail(productDTO.ProductId.Value);
+
         }
 
         public async Task<IActionResult> ProductDetail(int productId)

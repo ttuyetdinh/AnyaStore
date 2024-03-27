@@ -13,7 +13,7 @@
                             <div class="d-flex justify-content-between py-2">
                                 <span class="text-danger" style="font-size: 20px;">@string.Format("{0:c}",
                                 item.Price)</span>
-                                <span class="badge bg-warning text-white p-2"> @item.Category.Name</span>
+                                <span class="badge bg-warning text-white p-2"> @item.Category?.Name</span>
 
                             </div>
                             <p class="card-text">@item.Description</p>
