@@ -33,6 +33,14 @@ builder.Services
         options.Cookie.Name = "Anyastore.Web.Cookie";
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Home/AccessDenied";
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                context.Response.Redirect("/Auth/Login?loginRequired=true");
+                return Task.CompletedTask;
+            }
+        };
     });
 
 

@@ -30,9 +30,13 @@ namespace AnyaStore.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(bool loginRequired = false)
         {
             var loginDTO = new LoginRequestDTO();
+            if (loginRequired)
+            {
+                TempData["error"] = "You have to login first";
+            }
             return View(loginDTO);
         }
 
