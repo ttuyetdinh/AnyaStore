@@ -30,7 +30,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Services
                 return JsonConvert.DeserializeObject<CouponDTO>(Convert.ToString(responseDTO.Result));
             }
 
-            return new CouponDTO();
+            return null;
         }
     }
 }

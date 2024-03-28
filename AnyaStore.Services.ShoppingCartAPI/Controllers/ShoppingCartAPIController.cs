@@ -56,17 +56,15 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
                 {
                     item.CartHeader = null;
                     item.Product = productList.FirstOrDefault(u => u.ProductId == item.ProductId);
-                    cart.CartHeader.CartTotal += item.Count * (item?.Product?.Price ?? 0);
 
                 }
 
                 if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
                     var coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
-                    if (coupon != null && cart.CartHeader.CartTotal >= coupon.MinAmount)
+                    if (coupon != null)
                     {
-                        cart.CartHeader.Discount = cart.CartHeader.CartTotal * (coupon.DiscountAmount ?? 0) / 100;
-                        cart.CartHeader.CartTotal -= cart.CartHeader.Discount;
+                        cart.CartHeader.Coupon = coupon;
                     }
                 }
 
@@ -95,7 +93,14 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
                     _responseDTO.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_responseDTO);
                 }
-
+                var coupon = await _couponService.GetCoupon(entity.CouponCode);
+                if (coupon == null || coupon == default(CouponDTO))
+                {
+                    _responseDTO.ErrorMessage = new List<string> { "Invalid coupon code." };
+                    _responseDTO.IsSuccess = false;
+                    _responseDTO.StatusCode = HttpStatusCode.NotFound;
+                    return BadRequest(_responseDTO);
+                }
                 cartHeader.CouponCode = entity.CouponCode;
                 await _cartHeaderRepository.UpdateAsync(cartHeader);
 

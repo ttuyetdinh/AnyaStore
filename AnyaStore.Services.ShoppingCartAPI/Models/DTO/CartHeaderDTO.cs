@@ -14,5 +14,6 @@ namespace AnyaStore.Services.ShoppingCartAPI.Models.DTO
         public string? CouponCode { get; set; }
         public double? Discount { get; set; }
         public double? CartTotal { get; set; }
+        public CouponDTO? Coupon { get; set; }
     }
 }

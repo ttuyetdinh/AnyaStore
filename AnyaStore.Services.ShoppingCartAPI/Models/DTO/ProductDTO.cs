@@ -15,7 +15,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Models.DTO
         public double? Price { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
-        // public CategoryDTO? Category { get; set; } // included property
+        public CategoryDTO? Category { get; set; } // included property
 
     }
 }
