@@ -14,5 +14,7 @@ namespace AnyaStore.Web.Models.DTO
         public string? CouponCode { get; set; }
         public double? Discount { get; set; }
         public double? CartTotal { get; set; }
+        public double? FinalTotal { get; set; }
+        public CouponDTO? Coupon { get; set; }
     }
 }

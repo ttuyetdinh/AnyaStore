@@ -57,6 +57,7 @@ namespace AnyaStore.Web.Services
 
                 try
                 {
+                    // todo: refactor http response cases
                     switch (response.StatusCode)
                     {
                         case HttpStatusCode.NotFound:

@@ -130,7 +130,7 @@ namespace AnyaStore.Web.Controllers
             }
 
             TempData["error"] = "Error when adding product to cart!";
-            return await ProductDetail(productDTO.ProductId.Value);
+            return RedirectToAction(nameof(ProductController.ProductDetail), new { productId = productDTO.ProductId });
 
         }
 
