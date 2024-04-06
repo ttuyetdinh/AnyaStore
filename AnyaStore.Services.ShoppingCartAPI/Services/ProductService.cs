@@ -21,7 +21,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Services
         public async Task<IEnumerable<ProductDTO>> GetProducts()
         {
             var client = _httpClientFactory.CreateClient("Product");
-            var httpResponse = await client.GetAsync($"/api/ProductAPI/");
+            var httpResponse = await client.GetAsync($"/api/product-api/");
             var apiContent = await httpResponse.Content.ReadAsStringAsync();
             var responseDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
 

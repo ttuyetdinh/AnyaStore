@@ -15,13 +15,13 @@ namespace AnyaStore.Services.CouponAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CouponAPIController : ControllerBase
+    public class CouponsAPIController : ControllerBase
     {
         private readonly ICouponRepository _couponRepository;
         private ResponseDTO _responseDTO;
         private readonly IMapper _mapper;
 
-        public CouponAPIController(ICouponRepository couponRepository, IMapper mapper)
+        public CouponsAPIController(ICouponRepository couponRepository, IMapper mapper)
         {
             _couponRepository = couponRepository;
             _responseDTO = new ResponseDTO();
@@ -90,7 +90,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
             }
         }
 
-        [HttpGet("GetByCode/{code}")]
+        [HttpGet("{code}")]
         // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<IActionResult> GetCouponByCode(string code)
         {

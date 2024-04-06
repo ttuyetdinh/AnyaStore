@@ -95,44 +95,6 @@ namespace AnyaStore.Services.ProductAPI.Controllers
             }
         }
 
-        [HttpGet("GetByCategory/{id:int}")]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetProductByCategory(int id)
-        {
-            try
-            {
-                var includeProperties = "Category";
-                var products = await _productRepository.GetAllAsync(i => i.CategoryId == id, includeProperties: includeProperties);
-
-                var productsDTO = _mapper.Map<List<ProductDTO>>(products);
-
-                // check if product exists
-                if (productsDTO.Count == 0)
-                {
-                    _responseDTO.ErrorMessage = new List<string>() { "Product not found." };
-                    _responseDTO.IsSuccess = false;
-                    _responseDTO.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(_responseDTO);
-                }
-
-                _responseDTO.Result = productsDTO;
-                _responseDTO.StatusCode = HttpStatusCode.OK;
-
-                return Ok(_responseDTO);
-            }
-            catch (Exception ex)
-            {
-                _responseDTO.ErrorMessage = new List<string>() {
-                    "An error occurred while retrieving the products.",
-                    ex.InnerException != null ? ex.InnerException.Message : ex.Message
-                };
-                _responseDTO.IsSuccess = false;
-                _responseDTO.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(_responseDTO);
-            }
-        }
-
 
         // create a http post to insert new product
         [HttpPost]

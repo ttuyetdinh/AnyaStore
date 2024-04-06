@@ -64,7 +64,7 @@ namespace AnyaStore.Services.AuthAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpPost("assignRole")]
+        [HttpPost("assignrole")]
         public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDTO request)
         {
             // Email is used as UserName
