@@ -1,9 +1,11 @@
+using AnyaStore.Services.AuthAPI;
 using AnyaStore.Services.AuthAPI.Data;
 using AnyaStore.Services.AuthAPI.Models;
 using AnyaStore.Services.AuthAPI.Services;
 using AnyaStore.Services.AuthAPI.Services.IServices;
 using AnyaStore.Services.CouponAPI.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,10 +37,25 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("APISett
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(
+                                new LowercaseControllerParameterTransformer()));
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// add CORS configuration
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
