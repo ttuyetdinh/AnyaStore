@@ -37,7 +37,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ResponseDTO>> GetCart(string userId)
         {
@@ -92,7 +92,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPut("{cartid:int}/applycoupon")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> ApplyCoupon(int cartid, CartHeaderDTO entity)
         {
             try
@@ -129,7 +129,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPut("{cartid:int}/removecoupon")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> RemoveCoupon(int cartid)
         {
             try
@@ -159,7 +159,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("cartupsert")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> CartUpsert(CartUpsertDTO entity)
         {
             try
@@ -213,7 +213,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpDelete("{cartid:int}/item/{itemid:int}")]
-        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> RemoveFromCart(int cartid, int itemid)
 
         {

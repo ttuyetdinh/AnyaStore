@@ -36,7 +36,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // add authentication with JWT
-// builder.AddAppAuthentication();
+builder.AddAppAuthentication();
 
 builder.Services.AddControllers(options =>
 {
@@ -47,7 +47,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 // add configuration for swagger
-// builder.Services.AddSingleton<IConfigureOptions<SwaggerGenOptions>, ConfigurationSwaggerGenOptions>();
+builder.Services.AddSingleton<IConfigureOptions<SwaggerGenOptions>, ConfigurationSwaggerGenOptions>();
 builder.Services.AddSwaggerGen();
 
 // add CORS configuration
