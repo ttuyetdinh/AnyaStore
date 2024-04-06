@@ -25,7 +25,7 @@ namespace AnyaStore.Web.Services
         {
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = SD.ApiType.PUT,
                 Data = cartHeaderDTO,
                 Url = $"{shoppingCartUrl}/api/carts/{cartId}/applycoupon",
             });
@@ -54,7 +54,7 @@ namespace AnyaStore.Web.Services
         {
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = SD.ApiType.PUT,
                 Url = $"{shoppingCartUrl}/api/carts/{cartId}/RemoveCoupon",
             });
         }

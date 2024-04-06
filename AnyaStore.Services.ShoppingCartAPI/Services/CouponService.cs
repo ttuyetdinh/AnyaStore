@@ -21,7 +21,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Services
         public async Task<CouponDTO> GetCoupon(string couponCode)
         {
             var client = _httpClientFactory.CreateClient("Coupon");
-            var httpResponse = await client.GetAsync($"/api/CouponAPI/GetByCode/{couponCode}");
+            var httpResponse = await client.GetAsync($"/api/coupons/{couponCode}");
             var apiContent = await httpResponse.Content.ReadAsStringAsync();
             var responseDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
 
