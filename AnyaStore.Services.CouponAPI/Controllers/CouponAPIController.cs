@@ -30,7 +30,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> GetCoupons()
         {
             try
@@ -56,7 +56,7 @@ namespace AnyaStore.Services.CouponAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<IActionResult> GetCoupon(int id)
         {
             try

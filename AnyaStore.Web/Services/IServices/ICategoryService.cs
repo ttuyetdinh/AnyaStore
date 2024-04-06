@@ -11,6 +11,7 @@ namespace AnyaStore.Web.Services.IServices
         Task<T> GetAllAsync<T>();
         Task<T> GetAsync<T>(int id);
         Task<T> CreateAsync<T>(CategoryDTO dto);
+        Task<T> GetCategoryProductsAsync<T>(int id);
         Task<T> UpdateAsync<T>(CategoryDTO dto);
         Task<T> DeleteAsync<T>(int id);
     }

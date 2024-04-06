@@ -27,7 +27,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = $"{authUrl}/api/AuthAPI/assignRole",
+                Url = $"{authUrl}/api/auth/assignrole",
             });
         }
 
@@ -37,7 +37,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = $"{authUrl}/api/AuthAPI/login",
+                Url = $"{authUrl}/api/auth/login",
             }, withBearer: false);
         }
 
@@ -47,7 +47,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = $"{authUrl}/api/AuthAPI/register",
+                Url = $"{authUrl}/api/auth/register",
             }, withBearer: false);
         }
     }

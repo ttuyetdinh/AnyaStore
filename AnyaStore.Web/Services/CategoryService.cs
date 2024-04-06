@@ -27,7 +27,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = $"{productUrl}/api/CategoryAPI",
+                Url = $"{productUrl}/api/categories",
             });
         }
 
@@ -36,7 +36,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = $"{productUrl}/api/CategoryAPI/{id}",
+                Url = $"{productUrl}/api/categories/{id}",
             });
         }
 
@@ -45,7 +45,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{productUrl}/api/CategoryAPI",
+                Url = $"{productUrl}/api/categories",
             });
         }
 
@@ -54,7 +54,16 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{productUrl}/api/CategoryAPI/{id}",
+                Url = $"{productUrl}/api/categories/{id}",
+            });
+        }
+
+        public async Task<T> GetCategoryProductsAsync<T>(int id)
+        {
+            return await _baseService.SendAsync<T>(new RequestDTO()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = $"{productUrl}/api/categories/{id}/products",
             });
         }
 
@@ -64,7 +73,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = $"{productUrl}/api/CategoryAPI",
+                Url = $"{productUrl}/api/categories",
             });
         }
     }

@@ -36,7 +36,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             _couponService = couponService;
         }
 
-        [HttpGet("user/{userId}")]
+        [HttpGet("users/{userId}")]
         // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ResponseDTO>> GetCart(string userId)
@@ -91,12 +91,13 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
         }
 
-        [HttpPut("{id:int}/applycoupon")]
-        public async Task<ActionResult<ResponseDTO>> ApplyCoupon(CartHeaderDTO entity)
+        [HttpPut("{cartid:int}/applycoupon")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        public async Task<ActionResult<ResponseDTO>> ApplyCoupon(int cartid, CartHeaderDTO entity)
         {
             try
             {
-                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == entity.CartHeaderId);
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == cartid);
                 if (cartHeader == null)
                 {
                     _responseDTO.ErrorMessage = new List<string> { "CartHeader not found." };
@@ -127,12 +128,13 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
         }
 
-        [HttpPut("{cartId:int}/removecoupon")]
-        public async Task<ActionResult<ResponseDTO>> RemoveCoupon(int cartId)
+        [HttpPut("{cartid:int}/removecoupon")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        public async Task<ActionResult<ResponseDTO>> RemoveCoupon(int cartid)
         {
             try
             {
-                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == cartId);
+                var cartHeader = await _cartHeaderRepository.GetAsync(u => u.CartHeaderId == cartid);
                 if (cartHeader == null)
                 {
                     _responseDTO.ErrorMessage = new List<string> { "CartHeader not found." };
@@ -157,6 +159,7 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("cartupsert")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
         public async Task<ActionResult<ResponseDTO>> CartUpsert(CartUpsertDTO entity)
         {
             try
@@ -209,13 +212,14 @@ namespace AnyaStore.Services.ShoppingCartAPI.Controllers
             }
         }
 
-        [HttpDelete("{cartId:int}/item/{itemId:int}")]
-        public async Task<ActionResult<ResponseDTO>> RemoveFromCart(int cartId, int itemId)
+        [HttpDelete("{cartid:int}/item/{itemid:int}")]
+        // [Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.User)}")]
+        public async Task<ActionResult<ResponseDTO>> RemoveFromCart(int cartid, int itemid)
 
         {
             try
             {
-                var cartDetails = await _cartDetailRepository.GetAsync(u => u.CartDetailsId == itemId);
+                var cartDetails = await _cartDetailRepository.GetAsync(u => u.CartDetailsId == itemid);
                 if (cartDetails == null)
                 {
                     return NotFound(new ResponseDTO

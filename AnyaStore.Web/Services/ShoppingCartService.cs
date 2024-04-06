@@ -21,13 +21,13 @@ namespace AnyaStore.Web.Services
             _baseService.SetBaseUrl(shoppingCartUrl);
         }
 
-        public async Task<T> ApplyCouponAsync<T>(CartHeaderDTO cartHeaderDTO)
+        public async Task<T> ApplyCouponAsync<T>(int cartId, CartHeaderDTO cartHeaderDTO)
         {
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.POST,
                 Data = cartHeaderDTO,
-                Url = $"{shoppingCartUrl}/api/ShoppingCartAPI/ApplyCoupon",
+                Url = $"{shoppingCartUrl}/api/carts/{cartId}/applycoupon",
             });
         }
 
@@ -37,7 +37,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = cartUpsertDTO,
-                Url = $"{shoppingCartUrl}/api/ShoppingCartAPI/CartUpsert",
+                Url = $"{shoppingCartUrl}/api/carts/cartupsert",
             });
         }
 
@@ -46,7 +46,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{shoppingCartUrl}/api/ShoppingCartAPI/GetCart/{userId}",
+                Url = $"{shoppingCartUrl}/api/carts/users/{userId}",
             });
         }
 
@@ -55,17 +55,17 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.POST,
-                Url = $"{shoppingCartUrl}/api/ShoppingCartAPI/{cartId}/RemoveCoupon",
+                Url = $"{shoppingCartUrl}/api/carts/{cartId}/RemoveCoupon",
             });
         }
 
-        public async Task<T> RemoveFromCartAsync<T>(CartDetailsRemoveDTO cartDetailsDTO)
+        public async Task<T> RemoveFromCartAsync<T>(int cartId, int itemId)
         {
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.POST,
-                Data = cartDetailsDTO,
-                Url = $"{shoppingCartUrl}/api/ShoppingCartAPI/RemoveFromCart",
+                Data = null,
+                Url = $"{shoppingCartUrl}/api/carts/{cartId}/item/{itemId}",
             });
         }
     }

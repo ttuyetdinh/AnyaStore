@@ -28,7 +28,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = $"{couponUrl}/api/CouponAPI",
+                Url = $"{couponUrl}/api/coupons",
             });
         }
 
@@ -37,7 +37,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = $"{couponUrl}/api/CouponAPI/{id}",
+                Url = $"{couponUrl}/api/coupons/{id}",
             });
         }
 
@@ -46,7 +46,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{couponUrl}/api/CouponAPI",
+                Url = $"{couponUrl}/api/coupons",
             });
         }
 
@@ -55,7 +55,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{couponUrl}/api/CouponAPI/{id}",
+                Url = $"{couponUrl}/api/coupons/{id}",
             });
         }
 
@@ -64,7 +64,7 @@ namespace AnyaStore.Web.Services
             return await _baseService.SendAsync<T>(new RequestDTO()
             {
                 ApiType = SD.ApiType.GET,
-                Url = $"{couponUrl}/api/CouponAPI/GetByCode/{code}",
+                Url = $"{couponUrl}/api/coupons/{code}",
             });
         }
 
@@ -74,7 +74,7 @@ namespace AnyaStore.Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = $"{couponUrl}/api/CouponAPI",
+                Url = $"{couponUrl}/api/coupons",
             });
         }
     }

@@ -58,9 +58,9 @@ namespace AnyaStore.Web.Controllers
         public async Task<IActionResult> ApplyCoupon(CartDTO cartDTO)
         {
             var UserId = cartDTO.CartHeader.UserId;
-            var CartHeaderId = cartDTO.CartHeader.CartHeaderId;
+            var cartId = cartDTO.CartHeader.CartHeaderId ?? 0;
 
-            var response = await _cartService.ApplyCouponAsync<ResponseDTO>(cartDTO.CartHeader);
+            var response = await _cartService.ApplyCouponAsync<ResponseDTO>(cartId, cartDTO.CartHeader);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Coupon applied successfully!";
